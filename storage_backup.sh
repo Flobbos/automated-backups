@@ -5,11 +5,11 @@
 # Set the timestamp
 TIMESTAMP=$(date '+%Y%m%d%H%M')
 # Linode bucket
-BUCKET="emtechnik-storage"
+BUCKET="account-storage"
 # Path for backup file
-BACKUP_DIR="/home/emtechnik/backups"
+BACKUP_DIR="/home/account/backups"
 # Folder or file to backup
-BACKUP_TARGET="/home/emtechnik/laravel/storage/app"
+BACKUP_TARGET="/home/account/folder/to/backup"
 #------------------------------------------------#
 # Actual execution                               #
 #------------------------------------------------#

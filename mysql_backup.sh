@@ -5,15 +5,15 @@
 # Set the timestamp
 TIMESTAMP=$(date '+%Y%m%d%H%M')
 # Database
-DB="emtechnik_db"
+DB="db_to_backup"
 # Database user
-DB_USER="emtechnik_dbuser"
+DB_USER="user_for_db"
 # Database password
-DB_PASSWORD='zdmwlaCHZQ4U'
+DB_PASSWORD='supersecret'
 # Linode bucket
-BUCKET="emtechnik-sql"
+BUCKET="account-sql"
 # Path for backup file
-BACKUP_DIR="/home/emtechnik/backups"
+BACKUP_DIR="/home/account/backups"
 #------------------------------------------------#
 # Actual execution                               #
 #------------------------------------------------#
