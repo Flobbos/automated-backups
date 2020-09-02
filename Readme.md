@@ -136,7 +136,9 @@ WARNING: There is no confirmation for doing this or any other safety net. What i
 ### Life cycle policy
 
 In order to have Linode manage the life cycle of your backups you nee to set a life cycle policy in XML format. A file with
-a working sample configuration is provided. The important part is the expiration setting in days. This defines how long files will be kept in storage after they have been created.
+a working sample configuration is provided for sql and file buckets. The important part is the expiration setting in days. This defines how long files will be kept in storage after they have been created.
+
+### SQL life cycle
 
 ```xml
 <LifecycleConfiguration>
@@ -145,13 +147,29 @@ a working sample configuration is provided. The important part is the expiration
         <Prefix></Prefix>
         <Status>Enabled</Status>
         <Expiration>
-            <Days>1</Days>
+            <Days>7</Days>
         </Expiration>
     </Rule>
 </LifecycleConfiguration>
 ```
 
-You can set a life cycle policy for every bucket individually.
+### Storage life cycle
+
+```xml
+<LifecycleConfiguration>
+    <Rule>
+        <ID>delete-old-objects</ID>
+        <Prefix></Prefix>
+        <Status>Enabled</Status>
+        <Expiration>
+            <Days>14</Days>
+        </Expiration>
+    </Rule>
+</LifecycleConfiguration>
+```
+
+You can set a life cycle policy for every bucket individually. A detailed description about life cycle options can be found
+on the Linode website [here](https://www.linode.com/docs/platform/object-storage/how-to-manage-objects-with-lifecycle-policies/#creating-a-lifecycle-policy-file)
 
 ```bash
 s3cmd setlifecycle life_cycle.xml s3://my-bucket-name

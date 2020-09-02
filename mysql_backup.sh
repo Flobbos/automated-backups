@@ -23,10 +23,13 @@ echo "Backing up $DB to db_$TIMESTAMP.sql"
 #/usr/bin/mysqldump -u $DB_USER -p$DB_PASSWORD $DB | (/usr/bin/pv --timer --rate --bytes > $BACKUP_DIR/db_$TIMESTAMP.sql)
 # Use this line for cron based backups
 /usr/bin/mysqldump -u $DB_USER -p$DB_PASSWORD $DB > $BACKUP_DIR/db_$TIMESTAMP.sql
+# Zip sql file
+echo "Zipping SQL file"
+/usr/bin/gzip $BACKUP_DIR/db_$TIMESTAMP.sql
 # Upload the file to Linode
 echo "Uploading $BACKUP_DIR/db_$TIMESTAMP.sql"
-/usr/bin/s3cmd put $BACKUP_DIR/db_$TIMESTAMP.sql s3://$BUCKET -P
+/usr/bin/s3cmd put $BACKUP_DIR/db_$TIMESTAMP.sql.gz s3://$BUCKET -P
 # Delete the file locally
-/usr/bin/rm $BACKUP_DIR/db_$TIMESTAMP.sql
+/usr/bin/rm $BACKUP_DIR/db_$TIMESTAMP.sql.gz
 # All done
 echo "Backup complete"
