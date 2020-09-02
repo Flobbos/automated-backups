@@ -136,7 +136,9 @@ WARNING: There is no confirmation for doing this or any other safety net. What i
 ### Life cycle policy
 
 In order to have Linode manage the life cycle of your backups you nee to set a life cycle policy in XML format. A file with
-a working sample configuration is provided. The important part is the expiration setting in days. This defines how long files will be kept in storage after they have been created.
+a working sample configuration is provided for sql and file buckets. The important part is the expiration setting in days. This defines how long files will be kept in storage after they have been created.
+
+### SQL life cycle
 
 ```xml
 <LifecycleConfiguration>
@@ -145,7 +147,22 @@ a working sample configuration is provided. The important part is the expiration
         <Prefix></Prefix>
         <Status>Enabled</Status>
         <Expiration>
-            <Days>1</Days>
+            <Days>7</Days>
+        </Expiration>
+    </Rule>
+</LifecycleConfiguration>
+```
+
+### Storage life cycle
+
+```xml
+<LifecycleConfiguration>
+    <Rule>
+        <ID>delete-old-objects</ID>
+        <Prefix></Prefix>
+        <Status>Enabled</Status>
+        <Expiration>
+            <Days>14</Days>
         </Expiration>
     </Rule>
 </LifecycleConfiguration>
@@ -162,6 +179,8 @@ To check if your life cycle policy is set or to check the settings run:
 ```bash
 s3cmd getlifecycle s3://my-bucket-name
 ```
+
+There are many options you can set for controlling storage life cycles. A detailed description about life cycle options can be found on the Linode website [here](https://www.linode.com/docs/platform/object-storage/how-to-manage-objects-with-lifecycle-policies)
 
 ## Cron
 
@@ -181,7 +200,7 @@ chmod +x storage_backup.sh
 You can either go into cPanel and set the cronjob there or manually do this by running:
 
 ```bash
-crontab -x
+crontab -e
 ```
 
 This will open Vi that lets you edit the crontab. Add the following line for the daily MySQL backup.
