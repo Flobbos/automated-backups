@@ -188,14 +188,14 @@ This will open Vi that lets you edit the crontab. Add the following line for the
 
 ```vi
 SHELL="/bin/bash"
-0 0 * * * cd /home/emtechnik/backups && ./mysql_backup.sh
+0 0 * * * cd /home/account/backups && ./mysql_backup.sh
 ```
 
 Add this line if you want to backup files once a week.
 
 ```vi
 SHELL="/bin/bash"
-0 0 * * 0 cd /home/emtechnik/backups && ./storage_backup.sh
+0 0 * * 0 cd /home/account/backups && ./storage_backup.sh
 ```
 
 ## Manual backups
