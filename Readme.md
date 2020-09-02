@@ -168,8 +168,7 @@ a working sample configuration is provided for sql and file buckets. The importa
 </LifecycleConfiguration>
 ```
 
-You can set a life cycle policy for every bucket individually. A detailed description about life cycle options can be found
-on the Linode website [here](https://www.linode.com/docs/platform/object-storage/how-to-manage-objects-with-lifecycle-policies)
+You can set a life cycle policy for every bucket individually.
 
 ```bash
 s3cmd setlifecycle life_cycle.xml s3://my-bucket-name
@@ -180,6 +179,8 @@ To check if your life cycle policy is set or to check the settings run:
 ```bash
 s3cmd getlifecycle s3://my-bucket-name
 ```
+
+There are many options you can set for controlling storage life cycles. A detailed description about life cycle options can be found on the Linode website [here](https://www.linode.com/docs/platform/object-storage/how-to-manage-objects-with-lifecycle-policies)
 
 ## Cron
 
