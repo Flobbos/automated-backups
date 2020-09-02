@@ -200,7 +200,7 @@ chmod +x storage_backup.sh
 You can either go into cPanel and set the cronjob there or manually do this by running:
 
 ```bash
-crontab -x
+crontab -e
 ```
 
 This will open Vi that lets you edit the crontab. Add the following line for the daily MySQL backup.
