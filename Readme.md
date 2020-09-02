@@ -169,7 +169,7 @@ a working sample configuration is provided for sql and file buckets. The importa
 ```
 
 You can set a life cycle policy for every bucket individually. A detailed description about life cycle options can be found
-on the Linode website [here](https://www.linode.com/docs/platform/object-storage/how-to-manage-objects-with-lifecycle-policies/#creating-a-lifecycle-policy-file)
+on the Linode website [here](https://www.linode.com/docs/platform/object-storage/how-to-manage-objects-with-lifecycle-policies)
 
 ```bash
 s3cmd setlifecycle life_cycle.xml s3://my-bucket-name
