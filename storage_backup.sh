@@ -1,15 +1,13 @@
 #!/bin/bash
+if [ -f .env ]
+then
+    export $(cat .env | sed 's/#.*//g' | xargs)
+fi
 #------------------------------------------------#
 # Variables here will be used in execution below #
 #------------------------------------------------#
 # Set the timestamp
 TIMESTAMP=$(date '+%Y%m%d%H%M')
-# Linode bucket
-BUCKET="account-storage"
-# Path for backup file
-BACKUP_DIR="/home/account/backups"
-# Folder or file to backup
-BACKUP_TARGET="/home/account/folder/to/backup"
 #------------------------------------------------#
 # Actual execution                               #
 #------------------------------------------------#
