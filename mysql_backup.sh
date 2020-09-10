@@ -25,7 +25,7 @@ echo "Zipping SQL file"
 /usr/bin/gzip $BACKUP_DIR/db_$TIMESTAMP.sql
 # Upload the file to Linode
 echo "Uploading $BACKUP_DIR/db_$TIMESTAMP.sql"
-/usr/bin/s3cmd put $BACKUP_DIR/db_$TIMESTAMP.sql.gz s3://$BUCKET -P
+/usr/bin/s3cmd put $BACKUP_DIR/db_$TIMESTAMP.sql.gz s3://$SQL_BUCKET -P
 # Delete the file locally
 /usr/bin/rm $BACKUP_DIR/db_$TIMESTAMP.sql.gz
 # All done
