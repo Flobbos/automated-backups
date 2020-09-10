@@ -1,6 +1,6 @@
 <LifecycleConfiguration>
     <Rule>
-        <ID>delete-old-objects</ID>
+        <ID>delete-old-storage</ID>
         <Prefix></Prefix>
         <Status>Enabled</Status>
         <Expiration>

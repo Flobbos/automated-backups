@@ -1,19 +1,16 @@
 #!/bin/bash
+if [ -f .env ]
+then
+    export $(cat .env | sed 's/#.*//g' | xargs)
+else
+    echo "No environment file present." >> /dev/stderr
+    exit
+fi
 #------------------------------------------------#
 # Variables here will be used in execution below #
 #------------------------------------------------#
 # Set the timestamp
 TIMESTAMP=$(date '+%Y%m%d%H%M')
-# Database
-DB="db_to_backup"
-# Database user
-DB_USER="user_for_db"
-# Database password
-DB_PASSWORD='supersecret'
-# Linode bucket
-BUCKET="account-sql"
-# Path for backup file
-BACKUP_DIR="/home/account/backups"
 #------------------------------------------------#
 # Actual execution                               #
 #------------------------------------------------#
