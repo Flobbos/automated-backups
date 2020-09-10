@@ -12,26 +12,23 @@ The following shell scripts can be used to backup MySQL databases and any folder
 
 ## Prerequisites
 
-### Linode
+### Object Storage
 
-Linode holds the cloud storage buckets that will be used to store the backups. Access keys and secrets are stored in
-out TeamPass installation. If you need a new access key for a different server, then you can go in and generate it. You
-can either create new buckets from the CLI or create them from the Linode management console.
+Any AWS S3 compatible object storage can hold storage buckets that will be used to store the backups. You need to configure your s3cmd installation for use with the respective object storage. You can either create new buckets from the CLI or create them from the your online management console.
 
-Naming conventions are:
+Naming suggesions are:
 
 SQL
-account-sql ie. emtechnik-sql
+account-sql for SQL backups. Where account is the user's account you want the backup to be made from.
 
 Files
-account-storage ie. emtechnik-storage
+account-storage for files you want backed up.
 
 Object storage works differently from other types of storage so think of a bucket as a folder where you put your stuff.
 
 ### Server (s3cmd)
 
-All API integration is done via s3cmd, the CLI utility from Amazon S3 that works with all S3 comaptible cloud storage APIs.
-You need to install s3cmd from the root console in either WHM or directly on the server.
+All API integration is done via s3cmd, an oder but simple CLI for S3 comaptible cloud storage APIs. You need to install this on the server either under root or for every user. It needs to be configured for every user in a CageFS/Cloudlinux scenario anyways.
 
 ### CentOS installation
 
@@ -54,7 +51,7 @@ s3cmd --configure
 This will result in a .s3cfg file being written to the root folder of the user account.
 
 ```bash
-Access Key: 4TQ5CJGZS92LLEQHLXB3
+Access Key: youraccesskey
 Secret Key: enteryoursecretkeyhere
 Default Region: US
 S3 Endpoint: eu-central-1.linodeobjects.com
@@ -70,7 +67,7 @@ website_endpoint = http://%(bucket)s.website-eu-central-1.linodeobjects.com/
 ```
 
 You will most likely need to set the last 3 entries manually after the configuration process because these values default to
-Amazon S3.
+Amazon S3 but this depends on which object storage you're using.
 
 ### Backup folder
 
@@ -78,36 +75,15 @@ To work with backups I suggest you add a folder called backups in the root folde
 
 ## Configuration
 
-In order for the scripts to work you need to change a few variables inside the scripts.
+In order for the scripts to work you need to change a few variables inside the .env file provided with this repo.
 
-### mysql_backup.sh
-
-```sh
-# Set the timestamp
-TIMESTAMP=$(date '+%Y%m%d%H%M')
-# Database
-DB="db_you_backup"
-# Database user
-DB_USER="user_for_db"
-# Database password
+```env
+DB='db_blah'
+DB_USER='db_user'
 DB_PASSWORD='supersecret'
-# Linode bucket
-BUCKET="account-sql"
-# Path for backup file
-BACKUP_DIR="/home/account/backups"
-```
-
-### storage_backup.sh
-
-```sh
-# Set the timestamp
-TIMESTAMP=$(date '+%Y%m%d%H%M')
-# Linode bucket
-BUCKET="account-storage"
-# Path for backup file
-BACKUP_DIR="/home/account/backups"
-# Folder or file to backup
-BACKUP_TARGET="/home/account/folder/to/backup"
+BUCKET='your-bucket'
+BACKUP_DIR='/home/account/backups'
+BACKUP_TARGET='/home/account/folder/to/backup'
 ```
 
 Update the above values to match the settings you need for the current account you're running backups in.
@@ -116,7 +92,7 @@ Update the above values to match the settings you need for the current account y
 
 ### Creating a bucket
 
-If you haven't created new buckets in the Linode console you can create buckets right from the CLI.
+If you haven't created new buckets in the your console you can create buckets right from the CLI.
 
 ```bash
 s3cmd mb s3://my-bucket-name
@@ -124,8 +100,8 @@ s3cmd mb s3://my-bucket-name
 
 ### Removing a bucket
 
-Sometimes you may want to remove an entire bucket. You can't do this from the Linode panel when the bucket still contains
-files. In order to get rid of a bucket and all its contents you can use the following command.
+Sometimes you may want to remove an entire bucket. You can't do this from the control panel when the bucket still contains
+files. This is at least true for Linode object storage. In order to get rid of a bucket and all its contents you can use the following command.
 
 ```bash
 s3cmd rb -r -f s3://my-bucket-name/
@@ -140,10 +116,12 @@ a working sample configuration is provided for sql and file buckets. The importa
 
 ### SQL life cycle
 
+File: lifecycle-sql.xml
+
 ```xml
 <LifecycleConfiguration>
     <Rule>
-        <ID>delete-old-objects</ID>
+        <ID>delete-old-sql</ID>
         <Prefix></Prefix>
         <Status>Enabled</Status>
         <Expiration>
@@ -155,10 +133,12 @@ a working sample configuration is provided for sql and file buckets. The importa
 
 ### Storage life cycle
 
+File: lifecycle-storage.xml
+
 ```xml
 <LifecycleConfiguration>
     <Rule>
-        <ID>delete-old-objects</ID>
+        <ID>delete-old-files</ID>
         <Prefix></Prefix>
         <Status>Enabled</Status>
         <Expiration>
@@ -171,7 +151,7 @@ a working sample configuration is provided for sql and file buckets. The importa
 You can set a life cycle policy for every bucket individually.
 
 ```bash
-s3cmd setlifecycle life_cycle.xml s3://my-bucket-name
+s3cmd setlifecycle lifecyle-whatever.xml s3://my-bucket-name
 ```
 
 To check if your life cycle policy is set or to check the settings run:
@@ -203,16 +183,16 @@ You can either go into cPanel and set the cronjob there or manually do this by r
 crontab -e
 ```
 
-This will open Vi that lets you edit the crontab. Add the following line for the daily MySQL backup.
+This will open Vim that lets you edit the crontab. Add the following line for the daily MySQL backup.
 
-```vi
+```vim
 SHELL="/bin/bash"
 0 0 * * * cd /home/account/backups && ./mysql_backup.sh
 ```
 
 Add this line if you want to backup files once a week.
 
-```vi
+```vim
 SHELL="/bin/bash"
 0 0 * * 0 cd /home/account/backups && ./storage_backup.sh
 ```
