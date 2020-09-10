@@ -2,6 +2,9 @@
 if [ -f .env ]
 then
     export $(cat .env | sed 's/#.*//g' | xargs)
+else
+    echo "No environment file present." >> /dev/stderr
+    exit
 fi
 #------------------------------------------------#
 # Variables here will be used in execution below #
