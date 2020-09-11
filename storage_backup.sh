@@ -1,7 +1,7 @@
 #!/bin/bash
 if [ -f .env ]
 then
-    export $(cat .env | sed 's/#.*//g' | xargs)
+    export $(cat .env | sed 's/\.*//g' | xargs)
 else
     echo "No environment file present." >> /dev/stderr
     exit
