@@ -21,5 +21,5 @@ cd $BACKUP_DIR && /usr/bin/tar -czf storage_$TIMESTAMP.tar.gz $BACKUP_TARGET
 echo "Uploading storage_$TIMESTAMP.tar.gz"
 /usr/bin/s3cmd put $BACKUP_DIR/storage_$TIMESTAMP.tar.gz s3://$STORAGE_BUCKET -P
 # Delete the file locally
-rm $BACKUP_DIR/storage_$TIMESTAMP.tar.gz
+/usr/bin/rm $BACKUP_DIR/storage_$TIMESTAMP.tar.gz
 echo "Backup complete"
